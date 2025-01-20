@@ -1,0 +1,6 @@
+<c:FragmentDefinition xmlns="sap.m"
+    xmlns:c="sap.ui.core">
+    <SelectDialog items="{jsonModel>/DepoAdresiSH}" title="{i18n>DEPO_ADRESI_SH}" cancel="onSelectDialogCancel" confirm="onSelectDialogConfirm" liveChange="onSelectDialogSearch" search="onSelectDialogSearch">
+        <StandardListItem title="{jsonModel>Lgpla}" description="{jsonModel>Quan}" info="{jsonModel>Charg}"></StandardListItem>
+    </SelectDialog>
+</c:FragmentDefinition>

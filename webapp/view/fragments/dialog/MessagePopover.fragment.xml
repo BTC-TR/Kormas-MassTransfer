@@ -1,0 +1,15 @@
+<c:FragmentDefinition xmlns="sap.m"
+    xmlns:c="sap.ui.core">
+    <Dialog state="Error" title="{i18n>HATA_MESAJLARI}" class="sapUiContentPadding">
+        <beginButton>
+            <Button text="{i18n>TAMAM}" press="_closeMessageDialog"></Button>
+        </beginButton>
+        <content>
+            <List items="{jsonModel>/Messages}" growing="true" growingScrollToLoad="true">
+                <items>
+                    <StandardListItem title="{jsonModel>Message}" highlight="{= ${jsonModel>Type} === 'E' ? 'Error' : 'Success' }"></StandardListItem>
+                </items>
+            </List>
+        </content>
+    </Dialog>
+</c:FragmentDefinition>

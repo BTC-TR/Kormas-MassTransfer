@@ -1,0 +1,27 @@
+<c:FragmentDefinition xmlns:form="sap.ui.layout.form"
+    xmlns="sap.m"
+    xmlns:c="sap.ui.core">
+    <FlexBox justifyContent="Center">
+        <form:SimpleForm layout="ResponsiveGridLayout">
+            <Label text="{i18n>BARKOD}" design="Bold"/>
+            <Input id="idBarkodInput" value="{jsonModel>/Detail/Barkod}" required="true" submit="_checkBarcode($event)" liveChange="_checkBarcode($event)"/>
+            <Label text="{i18n>MALZEME}" design="Bold"/>
+            <Input value="{jsonModel>/Detail/Matnr}" editable="false"/>
+            <Label text="{i18n>MALZEME_TANIMI}" design="Bold"/>
+            <Input value="{jsonModel>/Detail/Maktx}" editable="false"/>
+            <Label text="{i18n>DEPO_ADRESI}"></Label>
+            <Input id="idDepoAdresiInput" value="{jsonModel>/Detail/Lgpla}" visible="{jsonModel>/HareketTuru}" submit="onDepoAdresiInputSubmit" required="true" showValueHelp="true" valueHelpRequest="_prepareValueHelpDialog($event, 'DepoAdresiSH')"></Input>
+            <Label text="{i18n>MIKTAR_VE_BIRIM}" design="Bold"/>
+            <Input id="idMiktarInput" value="{jsonModel>/Detail/Menge}" description="{jsonModel>/Detail/Meins}" submit="onMiktarInputSubmit" required="true" type="Number"/>
+            <Label text="{i18n>DEPO_ADRES_STOK_BILGISI}" design="Bold"/>
+            <Input value="{jsonModel>/Detail/DepoStok}" editable="false"/>
+            <Label ></Label>
+            <HBox justifyContent="SpaceBetween">
+                <Button text="{= !${device>/system/phone} ? ${i18n>TEMIZLE} : '' }" press="_clearHeader" icon="sap-icon://sys-cancel-2" type="Reject"/>
+                <Button text="{= !${device>/system/phone} ? ${i18n>EKLE} : '' }" press="onEkleButtonPress" icon="sap-icon://add" type="Emphasized" iconFirst="false"/>
+                <Button text="{i18n>DETAY}" press="onDetayButtonPress" type="Accept"/>
+                <Button text="{i18n>ADRES_SORGU}" type="Attention" press="onAdresSorguButtonPress" visible="{jsonModel>/HareketTuru}"/>
+            </HBox>
+        </form:SimpleForm>
+    </FlexBox>
+</c:FragmentDefinition>

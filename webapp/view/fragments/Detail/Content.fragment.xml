@@ -1,0 +1,30 @@
+<c:FragmentDefinition xmlns:form="sap.ui.layout.form"
+    xmlns="sap.m"
+    xmlns:c="sap.ui.core">
+    <Table alternateRowColors="true" id="idTransferTable" growing="true" growingScrollToLoad="true" includeItemInSelection="true" mode="SingleSelectLeft" sticky="ColumnHeaders,HeaderToolbar" items="{jsonModel>/TransferTable}">
+        <headerToolbar>
+            <OverflowToolbar >
+                <ToolbarSpacer ></ToolbarSpacer>
+                <Button text="{i18n>SIL}" type="Reject" icon="sap-icon://delete" press="_deleteRow($event)"></Button>
+            </OverflowToolbar>
+        </headerToolbar>
+        <columns>
+            <Column minScreenWidth="Tablet" demandPopin="true">
+                <Label text="{i18n>MALZEME}" design="Bold"></Label>
+            </Column>
+            <Column minScreenWidth="Tablet" demandPopin="true">
+                <Label text="{i18n>PARTI}" design="Bold"></Label>
+            </Column>
+            <Column minScreenWidth="Tablet" demandPopin="true">
+                <Label text="{i18n>MIKTAR_VE_BIRIM}" design="Bold"></Label>
+            </Column>
+        </columns>
+        <items>
+            <ColumnListItem >
+                <ObjectIdentifier title="{jsonModel>Matnr}" text="{jsonModel>Maktx}"></ObjectIdentifier>
+                <ObjectStatus text="{jsonModel>Charg}" state="Success"></ObjectStatus>
+                <ObjectNumber number="{parts:[{path:'jsonModel>Quan'}, {path:'jsonModel>Unit'}], type:'sap.ui.model.type.Currency', formatOptions:{showMeasure: false}}" unit="{jsonModel>Unit}" state="Error"></ObjectNumber>
+            </ColumnListItem>
+        </items>
+    </Table>
+</c:FragmentDefinition>

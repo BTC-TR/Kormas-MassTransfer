@@ -1,0 +1,8 @@
+<c:FragmentDefinition xmlns:form="sap.ui.layout.form"
+    xmlns="sap.m"
+    xmlns:c="sap.ui.core">
+    <OverflowToolbar >
+        <ToolbarSpacer ></ToolbarSpacer>
+        <Button text="{i18n>KAYDET}" type="Success" icon="sap-icon://save" press="onSaveButtonPress"></Button>
+    </OverflowToolbar>
+</c:FragmentDefinition>

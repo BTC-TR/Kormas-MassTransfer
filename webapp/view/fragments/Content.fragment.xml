@@ -1,0 +1,15 @@
+<c:FragmentDefinition xmlns:form="sap.ui.layout.form"
+    xmlns="sap.m"
+    xmlns:c="sap.ui.core">
+    <FlexBox justifyContent="Center">
+        <form:SimpleForm layout="ResponsiveGridLayout">
+            <Label text="{i18n>KAYNAK_DEPO}"></Label>
+            <Input id="idKaynakDepoInput" value="{jsonModel>/Main/KaynakDepo}" description="{jsonModel>/Main/KaynakDepoDesc}" valueHelpRequest="_prepareValueHelpDialog($event, 'KaynakDepoSH')" showValueHelp="true" submit="onKaynakDepoInputSubmit" change="onKaynakDepoInputSubmit"></Input>
+            <Label text="{i18n>HEDEF_DEPO}"></Label>
+            <Input id="idHedefDepoInput" value="{jsonModel>/Main/HedefDepo}" description="{jsonModel>/Main/HedefDepoDesc}" valueHelpRequest="_prepareValueHelpDialog($event, 'HedefDepoSH')" showValueHelp="true" submit="onHedefDepoInputSubmit" change="onHedefDepoInputSubmit"></Input>
+            <HBox >
+                <Button text="{i18n>ILERLE}" icon="sap-icon://open-command-field" press="onIlerleButtonPress" iconFirst="false" type="Ghost"/>
+            </HBox>
+        </form:SimpleForm>
+    </FlexBox>
+</c:FragmentDefinition>

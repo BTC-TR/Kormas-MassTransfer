@@ -1,0 +1,25 @@
+# yaml-language-server: $schema=https://sap.github.io/ui5-tooling/schema/ui5.yaml.json
+
+specVersion: "3.1"
+metadata:
+  name: com.kormas.uretimdentoplutransfer
+type: application
+builder:
+  resources:
+    excludes:
+      - /test/**
+      - /localService/**
+  customTasks:
+    - name: deploy-to-abap
+      afterTask: generateCachebusterInfo
+      configuration:
+        target:
+          url: http://krmss4dapp1.kormas.local:8000
+          client: "100"
+        app:
+          name: ZEWM_MASS_TRFR
+          description: Üretimden Toplu Transfer
+          package: ZFIORI_EWM
+          transport: K4DK908134
+        exclude:
+          - /test/
