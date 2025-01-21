@@ -27,9 +27,7 @@
 			</uxap:ObjectPageSection>
 		</uxap:sections>
 		<uxap:footer>
-			<OverflowToolbar >
-				<core:Fragment type="XML" fragmentName="com.kormas.uretimdentoplutransfer.view.fragments.Detail.Footer"></core:Fragment>
-			</OverflowToolbar>
+			<core:Fragment type="XML" fragmentName="com.kormas.uretimdentoplutransfer.view.fragments.Detail.Footer"></core:Fragment>
 		</uxap:footer>
 	</uxap:ObjectPageLayout>
 </mvc:View>

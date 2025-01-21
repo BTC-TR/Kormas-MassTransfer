@@ -26,6 +26,7 @@ sap.ui.define([
                 this._userId = sap.ushell.Container.getService("UserInfo").getId();
                 this._focusInput("idBarkodInput", 400);
                 this._getDetail();
+                this._clearDetail();
             },
 
             onBarkodInputSubmit: function (oEvent) {

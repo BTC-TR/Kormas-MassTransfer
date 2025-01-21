@@ -25,6 +25,7 @@ sap.ui.define([
                 this._oDataModel = this.getModel();
                 this._userId = sap.ushell.Container.getService("UserInfo").getId();
                 this._getDepoList();
+                this._clearMain();
                 this._focusInput("idKaynakDepoInput", 200);
             },
 

@@ -107,7 +107,10 @@ sap.ui.define([
         },
         _clearHeader: function () {
             this._jsonModel.setProperty("/Detail", models.createJSONModel().getData().Detail);
-            this._focusInput("idBarkodInput", 200)
+        },
+
+        _clearMain: function () {
+            this._jsonModel.setProperty("/Main", models.createJSONModel().getData().Main);
         },
 
         _getDepoList: function () {
@@ -125,7 +128,8 @@ sap.ui.define([
         _checkHedefDepo: function (sHedefDepo) {
             let that = this,
                 sPath = this.getModel().createKey("/HedefDepoKontrolSet", {
-                    IvLgort: sHedefDepo,
+                    IvLgort: that._jsonModel.getData().Main.KaynakDepo,
+                    IvHlgort: that._jsonModel.getData().Main.HedefDepo,
                     IvWerks: "1000"
                 });
 
@@ -138,7 +142,7 @@ sap.ui.define([
                 oData.Type !== "E" ? that.getRouter().navTo("Detail", {
                     KDepo: that.getModel("jsonModel").getProperty("/Main/KaynakDepo"),
                     HDepo: that.getModel("jsonModel").getProperty("/Main/HedefDepo")
-                }) : sap.m.MessageBox.error(oData.EvMessage);
+                }) : sap.m.MessageBox.error(oData.Message);
             }).catch((oError) => {
                 if (oError) {
                     sap.m.MessageBox.error(JSON.parse(oError.responseText).error.message.value);

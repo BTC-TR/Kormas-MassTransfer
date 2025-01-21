@@ -1,6 +1,6 @@
 <c:FragmentDefinition xmlns="sap.m"
     xmlns:c="sap.ui.core">
-    <Dialog state="Error" title="{i18n>HATA_MESAJLARI}" class="sapUiContentPadding">
+    <Dialog state="Information" title="{i18n>MESAJLAR}" class="sapUiContentPadding">
         <beginButton>
             <Button text="{i18n>TAMAM}" press="_closeMessageDialog"></Button>
         </beginButton>
