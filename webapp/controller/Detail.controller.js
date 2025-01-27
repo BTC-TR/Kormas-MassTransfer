@@ -43,9 +43,8 @@ sap.ui.define([
                     oEvent.getSource().setValue(sDepoAdresi.Lgpla);
                     this._focusInput("idMiktarInput", 200)
                 } else {
-                    oEvent.getSource().setValue("");
-                    oEvent.getSource().setDescription("");
-                    oEvent.getSource().focus();
+                    oEvent.getSource().setValue(sValue);
+                    this._focusInput("idMiktarInput", 200)
                 }
             },
 
