@@ -64,9 +64,7 @@ sap.ui.define([
             },
 
             onIlerleButtonPress: function () {
-                let that = this;
-
-                !that.getView().getModel("jsonModel").getProperty("/Main/KaynakDepo") || !that.getView().getModel("jsonModel").getProperty("/Main/HedefDepo") ? sap.m.MessageToast.show(this.getResourceBundle().getText("DEPO_BILGILERI_EKSIK")) : this._checkHedefDepo(that.getView().getModel("jsonModel").getProperty("/Main/HedefDepo"))
+                !this.getView().getModel("jsonModel").getProperty("/Main/KaynakDepo") || !this.getView().getModel("jsonModel").getProperty("/Main/HedefDepo") ? sap.m.MessageToast.show(this.getResourceBundle().getText("DEPO_BILGILERI_EKSIK")) : this._checkHedefDepo(this.getView().getModel("jsonModel").getProperty("/Main/HedefDepo"))
             }
         });
     });

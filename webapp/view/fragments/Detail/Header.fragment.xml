@@ -18,8 +18,8 @@
             <Label ></Label>
             <HBox justifyContent="SpaceBetween">
                 <Button text="{= !${device>/system/phone} ? ${i18n>TEMIZLE} : '' }" press="_clearHeader" icon="sap-icon://sys-cancel-2" type="Reject"/>
-                <Button text="{= !${device>/system/phone} ? ${i18n>EKLE} : '' }" press="onEkleButtonPress" icon="sap-icon://add" type="Emphasized" iconFirst="false"/>
-                <Button text="{i18n>DETAY}" press="onDetayButtonPress" type="Accept"/>
+                <Button text="{= !${device>/system/phone} ? ${i18n>EKLE} : '' }" press="onMiktarInputSubmit" icon="sap-icon://add" type="Emphasized" iconFirst="false"/>
+                <Button text="{i18n>DETAY}" press="_getDetail()" type="Accept"/>
                 <Button text="{i18n>ADRES_SORGU}" type="Attention" press="onAdresSorguButtonPress" visible="{jsonModel>/HareketTuru}"/>
             </HBox>
         </form:SimpleForm>

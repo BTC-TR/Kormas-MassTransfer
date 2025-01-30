@@ -130,7 +130,7 @@ sap.ui.define([
                 sPath = this.getModel().createKey("/HedefDepoKontrolSet", {
                     IvLgort: that._jsonModel.getData().Main.KaynakDepo,
                     IvHlgort: that._jsonModel.getData().Main.HedefDepo,
-                    IvWerks: "1000"
+                    IvWerks: that._jsonModel.getData().Werks
                 });
 
             this._readData(sPath, this.getModel()).then((oData) => {
@@ -157,7 +157,7 @@ sap.ui.define([
                 sBarcode = oEvent.getParameter("value"),
                 sPath = this.getModel().createKey("/BarkodOkutSet", {
                     IvBarcode: sBarcode,
-                    IvWerks: this._jsonModel.getProperty("/Werks")
+                    IvWerks: that._jsonModel.getData()
                 });
 
             this._readData(sPath, this.getModel()).then((oData) => {
@@ -247,7 +247,6 @@ sap.ui.define([
 
         _deleteRow: function (oEvent) {
             let oTable = oEvent.getSource().getParent().getParent(),
-                oBinding = oTable.getBinding("items"),
                 aSelectedItem = oTable.getSelectedItem(),
                 that = this;
 
@@ -298,14 +297,11 @@ sap.ui.define([
             let that = this,
                 aFilters = [
                     new Filter("IvLgnum", FilterOperator.EQ, this._jsonModel.getData().Lgnum),
-                    new Filter("IvMatnr", FilterOperator.EQ, that._jsonModel.getData().Detail.Matnr)];
+                    new Filter("IvMatnr", FilterOperator.EQ, this._jsonModel.getData().Detail.Matnr)
+                ];
 
             this._readMultiData("/AdresSorguSet", aFilters, this.getModel()).then((oData) => {
-                if (oData.results.length > 0) {
-                    that._jsonModel.setProperty("/DepoAdresiSH", oData.results);
-                } else {
-                    sap.m.MessageBox.error(that.getResourceBundle().getText("DEPO_ADRESI_BULUNAMADI"));
-                }
+                oData.results.length > 0 ? that._jsonModel.setProperty("/DepoAdresiSH", oData.results) : sap.m.MessageBox.error(that.getResourceBundle().getText("DEPO_ADRESI_BULUNAMADI"));
 
             }).catch((oError) => {
                 if (oError) {
@@ -367,8 +363,6 @@ sap.ui.define([
             sTitle = oSelectedItem.getTitle();
             sDescription = oSelectedItem.getDescription();
             sType = oSelectedItem.getInfo();
-
-
 
             sInputId.includes("idHedefDepo") ? [this._valueHelpInput.setValue(sTitle), this._valueHelpInput.setDescription(sDescription), this._checkHedefDepo(sTitle)] : sInputId.includes("idKaynakDepo") ? [this._valueHelpInput.setValue(sTitle), this._valueHelpInput.setDescription(sDescription), this._focusInput("idHedefDepoInput", 200)] : sInputId.includes("idDepoAdresi") ? [this._valueHelpInput.setValue(sTitle), this._focusInput("idMiktarInput", 200)] : null;
 

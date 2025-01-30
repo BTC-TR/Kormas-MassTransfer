@@ -24,13 +24,9 @@ sap.ui.define([
                 this._jsonModel = this.getModel("jsonModel");
                 this._oDataModel = this.getModel();
                 this._userId = sap.ushell.Container.getService("UserInfo").getId();
-                this._focusInput("idBarkodInput", 400);
-                this._getDetail();
                 this._clearDetail();
-            },
-
-            onBarkodInputSubmit: function (oEvent) {
-                this._checkBarcode(oEvent.getParameter("value"));
+                this._getDetail();
+                this._focusInput("idBarkodInput", 400);
             },
 
             onDepoAdresiInputSubmit: function (oEvent) {
@@ -75,36 +71,16 @@ sap.ui.define([
                     }
                 });
 
-                if (!validate) {
-                    return sap.m.MessageBox.error(this.getResourceBundle().getText("ZORUNLU_ALANLARI_DOLDURUNUZ"));
-                }
+                !validate ? sap.m.MessageBox.error(this.getResourceBundle().getText("ZORUNLU_ALANLARI_DOLDURUNUZ")) : this._checkStock(oBarcodeData);
 
-                this._checkStock(oBarcodeData);
-            },
-
-            onEkleButtonPress: function () {
-                this.onMiktarInputSubmit();
-            },
-
-            onDetayButtonPress: function () {
-                this._getDetail();
             },
 
             onAdresSorguButtonPress: function () {
-                if (!this._jsonModel.getData().Detail.Matnr) {
-                    return sap.m.MessageBox.error(this.getResourceBundle().getText("MALZEME_SECINIZ"));
-                }
-                this._getDepoAdresi();
+                !this._jsonModel.getData().Detail.Matnr ? sap.m.MessageBox.error(this.getResourceBundle().getText("MALZEME_SECINIZ")) : this._getDepoAdresi();
             },
 
-            onSaveButtonPress(oEvent) {
-                let oTable = this.getView().byId("idTransferTable");
-
-                if (oTable.getItems().length === 0) {
-                    return sap.m.MessageBox.error(this.getResourceBundle().getText("TRANSFER_TABLOSU_BOS"));
-                }
-
-                this._saveTransfer();
+            onSaveButtonPress: function() {
+                this.getView().byId("idTransferTable").getItems().length === 0 ? sap.m.MessageBox.error(this.getResourceBundle().getText("TRANSFER_TABLOSU_BOS")) : this._saveTransfer();
             }
         });
     });
