@@ -19,6 +19,7 @@ function (JSONModel, Device) {
             return new JSONModel({
                 Werks: "1000",
                 HareketTuru: false,
+                TotalMenge: 0,
                 Main: {
                     KaynakDepo: "",
                     HedefDepo: "",
@@ -33,6 +34,10 @@ function (JSONModel, Device) {
                     Meins: "",
                     DepoStok: "",
                     Lgpla: "",
+                },
+                Editable: {
+                    DepoAdresi: false,
+                    Miktar: false
                 },
                 TransferTable: []
             })

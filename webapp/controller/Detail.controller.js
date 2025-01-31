@@ -24,7 +24,7 @@ sap.ui.define([
                 this._jsonModel = this.getModel("jsonModel");
                 this._oDataModel = this.getModel();
                 this._userId = sap.ushell.Container.getService("UserInfo").getId();
-                this._clearDetail();
+                this._clearHeader();
                 this._getDetail();
                 this._focusInput("idBarkodInput", 400);
             },
@@ -37,49 +37,58 @@ sap.ui.define([
 
                 if (sDepoAdresi) {
                     oEvent.getSource().setValue(sDepoAdresi.Lgpla);
+                    this._jsonModel.setProperty("/Editable/Miktar", true)
                     this._focusInput("idMiktarInput", 200)
                 } else {
-                    oEvent.getSource().setValue(sValue);
-                    this._focusInput("idMiktarInput", 200)
+                    oEvent.getSource().setValue("");
+                    sap.m.MessageToast.show(this.getResourceBundle().getText("DEPO_ADRESI_BULUNAMADI"));
+                    this._jsonModel.setProperty("/Editable/Miktar", false)
+                    oEvent.oSource.focus();
                 }
+            },
+
+            onMengeInputLiveChange: function (oEvent) {
+                var _oInput = oEvent.getSource();
+                var val = _oInput.getValue();
+                val = val.replace(/[^\d]/g, '');
+                _oInput.setValue(val);
             },
 
             onMiktarInputSubmit: function () {
                 let oBarcodeData = this._jsonModel.getData().Detail,
                     sHareketTuru = this._jsonModel.getData().HareketTuru,
-                    validate = true;
+                    validate = true,
+                    that = this;
 
-                Object.entries(oBarcodeData).forEach(([key, value]) => {
-                    if (!sHareketTuru) {
-                        if (key !== "Lgpla") {
-                            if (key === "DepoStok") {
-                                //
-                            } else {
-                                if (!value) {
-                                    return validate = false;
-                                }
-                            }
-                        }
-                    } else {
-                        if (key === "DepoStok") {
+                if (!oBarcodeData.Matnr) {
+                    return sap.m.MessageBox.error(this.getResourceBundle().getText("MALZEME_EKSIK"))
+                }
 
-                        } else {
-                            if (!value) {
-                                return validate = false;
-                            }
-                        }
-                    }
-                });
+                if (this._jsonModel.getData().HareketTuru && !oBarcodeData.Lgpla) {
+                    return sap.m.MessageBox.error(this.getResourceBundle().getText("DEPO_ADRESI_GIRIN"))
+                }
 
-                !validate ? sap.m.MessageBox.error(this.getResourceBundle().getText("ZORUNLU_ALANLARI_DOLDURUNUZ")) : this._checkStock(oBarcodeData);
+                if (!oBarcodeData.Menge) {
+                    return sap.m.MessageBox.error(this.getResourceBundle().getText("MIKTAR_GIRINIZ"))
+                }
 
+                if (parseInt(oBarcodeData.Menge) > parseInt(oBarcodeData.DepoStok)) {
+                    return sap.m.MessageBox.error(that.getResourceBundle().getText("MIKTAR_STOKTAN_FAZLA", [that._jsonModel.getData().Main.KaynakDepo, that._jsonModel.getData().Detail.Menge]))
+                }
+
+                let toplam = (parseInt(oBarcodeData.Menge) + parseInt(this._jsonModel.getData().TotalMenge));
+                if (toplam > parseInt(oBarcodeData.DepoStok)) {
+                    return sap.m.MessageBox.error(that.getResourceBundle().getText("GIRILENLER_TOPLAMI_STOKTAN_FAZLA", [toplam, oBarcodeData.DepoStok, (parseInt(oBarcodeData.DepoStok) - that._jsonModel.getData().TotalMenge)]))
+                }
+
+                !validate ? sap.m.MessageBox.error(this.getResourceBundle().getText("ZORUNLU_ALANLARI_DOLDURUNUZ")) : this._addBarcode(oBarcodeData);
             },
 
             onAdresSorguButtonPress: function () {
-                !this._jsonModel.getData().Detail.Matnr ? sap.m.MessageBox.error(this.getResourceBundle().getText("MALZEME_SECINIZ")) : this._getDepoAdresi();
+                !this._jsonModel.getData().Detail.Matnr ? sap.m.MessageBox.error(this.getResourceBundle().getText("MALZEME_SECINIZ")) : this._getAdresses();
             },
 
-            onSaveButtonPress: function() {
+            onSaveButtonPress: function () {
                 this.getView().byId("idTransferTable").getItems().length === 0 ? sap.m.MessageBox.error(this.getResourceBundle().getText("TRANSFER_TABLOSU_BOS")) : this._saveTransfer();
             }
         });

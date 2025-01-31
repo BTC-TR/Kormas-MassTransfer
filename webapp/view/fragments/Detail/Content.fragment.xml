@@ -23,7 +23,7 @@
             <ColumnListItem >
                 <ObjectIdentifier title="{jsonModel>Matnr}" text="{jsonModel>Maktx}"></ObjectIdentifier>
                 <ObjectStatus text="{jsonModel>Charg}" state="Success"></ObjectStatus>
-                <ObjectNumber number="{parts:[{path:'jsonModel>Quan'}, {path:'jsonModel>Unit'}], type:'sap.ui.model.type.Currency', formatOptions:{showMeasure: false}}" unit="{jsonModel>Unit}" state="Error"></ObjectNumber>
+                <ObjectNumber number="{path:'jsonModel>Quan', formatter:'.formatter.numberUnit'}" unit="{jsonModel>Unit}" state="Error"></ObjectNumber>
             </ColumnListItem>
         </items>
     </Table>

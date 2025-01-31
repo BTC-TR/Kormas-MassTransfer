@@ -3,7 +3,7 @@ sap.ui.define([
     "com/kormas/uretimdentoplutransfer/controller/BaseController"
 ], function (
     ManagedObject,
-	BaseController
+    BaseController
 ) {
     "use strict";
 
@@ -14,11 +14,29 @@ sap.ui.define([
             }
 
             var isFloat = sValue.split(".");
-            if (isFloat[1] === "000") {
+            if (isFloat[1] === "00000000000000") {
                 return parseInt(sValue);
             } else {
                 return parseFloat(sValue).toFixed(2);
             }
         },
+
+        highlightStock: function (sValue) {
+            if (!sValue) {
+                return "";
+            }
+
+            let state = "None";
+
+            if (sValue.includes("F")) {
+                state = "Success"
+            } else if (sValue.includes("Q")) {
+                state = "Warning"
+            } else if (sValue.includes("B")) {
+                state = "Error"
+            }
+
+            return state;
+        }
     }
 });

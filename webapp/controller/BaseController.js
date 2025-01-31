@@ -107,10 +107,15 @@ sap.ui.define([
         },
         _clearHeader: function () {
             this._jsonModel.setProperty("/Detail", models.createJSONModel().getData().Detail);
+            this._focusInput("idBarkodInput", 300)
         },
 
         _clearMain: function () {
             this._jsonModel.setProperty("/Main", models.createJSONModel().getData().Main);
+        },
+
+        _clearEditable: function () {
+            this._jsonModel.setProperty("/Editable", models.createJSONModel().getData().Editable);
         },
 
         _getDepoList: function () {
@@ -119,10 +124,28 @@ sap.ui.define([
                 that.getModel("jsonModel").setProperty("/KaynakDepoSH", oData.results);
                 that._readMultiData("/HedefDepoSHSet", [new Filter("IvUname", FilterOperator.EQ, that._userId)], that.getModel()).then((oData) => {
                     that.getModel("jsonModel").setProperty("/HedefDepoSH", oData.results);
+                    that._readMultiData("/DepoAdresiSHSet", [], that.getModel()).then((oData) => {
+                        that.getModel("jsonModel").setProperty("/DepoAdresiSH", oData.results);
+                    }).finally(() => {
+                        sap.ui.core.BusyIndicator.hide()
+                    })
                 })
             }).finally(() => {
                 sap.ui.core.BusyIndicator.hide();
             })
+        },
+
+        _getAdresses: function () {
+            this._valueHelpInput = this.getView().byId("idDepoAdresiInput")
+            if (!this._adresSorguDialog) {
+                this._getDepoAdresi()
+                this._adresSorguDialog = sap.ui.xmlfragment(this.getView().getId(), "com.kormas.uretimdentoplutransfer.view.fragments.valueHelp.AdresSorguSH", this);
+                this.getView().addDependent(this._adresSorguDialog);
+            }
+            setTimeout(() => {
+                this._adresSorguDialog.open();
+                this._afterFocus(this._adresSorguDialog);
+            }, 300);
         },
 
         _checkHedefDepo: function (sHedefDepo) {
@@ -142,7 +165,12 @@ sap.ui.define([
                 oData.Type !== "E" ? that.getRouter().navTo("Detail", {
                     KDepo: that.getModel("jsonModel").getProperty("/Main/KaynakDepo"),
                     HDepo: that.getModel("jsonModel").getProperty("/Main/HedefDepo")
-                }) : sap.m.MessageBox.error(oData.Message);
+                }) : sap.m.MessageBox.error(oData.Message, {
+                    onClose: function () {
+                        that._clearMain();
+                        that._focusInput("idKaynakDepoInput", 200);
+                    }
+                });
             }).catch((oError) => {
                 if (oError) {
                     sap.m.MessageBox.error(JSON.parse(oError.responseText).error.message.value);
@@ -155,44 +183,66 @@ sap.ui.define([
         _checkBarcode: function (oEvent) {
             let that = this,
                 sBarcode = oEvent.getParameter("value"),
+                oInput = oEvent.oSource,
                 sPath = this.getModel().createKey("/BarkodOkutSet", {
                     IvBarcode: sBarcode,
-                    IvWerks: that._jsonModel.getData()
+                    IvWerks: that._jsonModel.getData().Werks,
+                    IvLgort: that._jsonModel.getData().Main.KaynakDepo
                 });
+
+
+            if (sBarcode.length < 13) {
+                return sap.m.MessageBox.error(this.getResourceBundle().getText("MALZEME_BULUNAMADI"), {
+                    onClose: function () {
+                        that._clearEditable()
+                        that._clearHeader()
+                        oInput.focus();
+                    }
+                })
+            }
 
             this._readData(sPath, this.getModel()).then((oData) => {
                 if (oData) {
                     that._jsonModel.setProperty("/Detail/Matnr", oData.Matnr);
                     that._jsonModel.setProperty("/Detail/Maktx", oData.Maktx);
                     that._jsonModel.setProperty("/Detail/Meins", oData.Meins);
-                    that._jsonModel.setProperty("/Detail/DepoStok", oData.DepoStok);
+                    that._jsonModel.setProperty("/Detail/DepoStok", oData.Clabs);
                     that._jsonModel.setProperty("/Detail/Lgpla", oData.Lgpla);
 
                     that.getModel("jsonModel").getData().HareketTuru ? that._focusInput("idDepoAdresiInput", 200) : that._focusInput("idMiktarInput", 200);
+                    that.getModel("jsonModel").getData().HareketTuru ? [that._jsonModel.setProperty("/Editable/DepoAdresi", true), that._jsonModel.setProperty("/Editable/Miktar", false)] : [that._jsonModel.setProperty("/Editable/DepoAdresi", false), that._jsonModel.setProperty("/Editable/Miktar", true)];
+
+                    that.getModel("jsonModel").getData().HareketTuru ? that._getDefaultAddress() : null
+
+                    let iTotal = 0;
+                    that._jsonModel.getData().TransferTable.forEach(element => {
+                        iTotal = + element.Quan;
+                    });
+
+                    that._jsonModel.setProperty("/TotalMenge", iTotal);
                 }
             }).catch((oError) => {
                 if (oError) {
                     sap.m.MessageBox.error(JSON.parse(oError.responseText).error.message.value);
                 }
+                this._clearHeader()
+                this._clearEditable()
             }).finally(() => {
                 sap.ui.core.BusyIndicator.hide();
             });
         },
 
-        _checkStock: function (oBarcodeData) {
+        _getDefaultAddress: function () {
             let that = this,
-                sPath = this.getModel().createKey("/StokSorguSet", {
-                    IvClabs: oBarcodeData.Menge,
-                    IvLgort: this._jsonModel.getData().Main.KaynakDepo,
-                    IvMatnr: oBarcodeData.Matnr,
-                    IvWerks: this._jsonModel.getData().Werks
+                sPath = this.getModel().createKey("/VarsayilanAdresSet", {
+                    IvLgort: this._jsonModel.getData().Main.HedefDepo,
+                    IvUname: this._userId
                 });
 
             this._readData(sPath, this.getModel()).then((oData) => {
-                if (oData.EvClabs) {
-                    that._jsonModel.setProperty("/Detail/DepoStok", oData.EvClabs)
-                    that._addBarcode(oBarcodeData);
-                }
+                oData.EvLgpla ? that._jsonModel.setProperty("/Detail/Lgpla", oData.EvLgpla) : null
+                that._jsonModel.setProperty("/Editable/DepoAdresi", true)
+                that._jsonModel.setProperty("/Editable/Miktar", true)
             }).catch((oError) => {
                 if (oError) {
                     sap.m.MessageBox.error(JSON.parse(oError.responseText).error.message.value);
@@ -214,12 +264,12 @@ sap.ui.define([
 
             this._readData(sPath, this.getModel()).then((oData) => {
 
-                oData.Type === "S" ? [sap.m.MessageBox.success(oData.Message, {
+                oData.Type === "S" ? [sap.m.MessageToast.show(oData.Message), that._clearHeader(), that._getDetail(), that._clearEditable()] : sap.m.MessageBox.error(oData.Message, {
                     onClose: function () {
-                        that._clearHeader();
-                        that._getDetail()
+                        that._jsonModel.setProperty("/Detail/Lgpla", "")
+                        that._focusInput("idDepoAdresiInput", 300)
                     }
-                })] : sap.m.MessageBox.error(oData.Message);
+                });
 
             }).catch((oError) => {
                 if (oError) {
@@ -282,7 +332,11 @@ sap.ui.define([
             this._jsonModel.setProperty("/Messages", [])
 
             this._createData("/KaydetBaslikSet", oEntry, this.getModel()).then((oData) => {
-                oData.NavToKaydetBaslik.results.length > 0 ? [that._jsonModel.setProperty("/Messages", oData.NavToKaydetBaslik.results), that._openMessageDialog()] : [sap.m.MessageBox.success(that.getResourceBundle().getText("MALZEME_BELGEESI", oData.NavToKaydetItem.EvMblnr))];
+                oData.NavToKaydetBaslik.results.length > 0 ? [that._jsonModel.setProperty("/Messages", oData.NavToKaydetBaslik.results), that._openMessageDialog()] : [sap.m.MessageBox.success(that.getResourceBundle().getText("MALZEME_BELGEESI", oData.NavToKaydetItem.EvMblnr), {
+                    onClose: function () {
+                        that._clearHeader()
+                    }
+                })];
             }).catch((oError) => {
                 if (oError) {
                     sap.m.MessageBox.error(JSON.parse(oError.responseText).error.message.value);
@@ -301,7 +355,7 @@ sap.ui.define([
                 ];
 
             this._readMultiData("/AdresSorguSet", aFilters, this.getModel()).then((oData) => {
-                oData.results.length > 0 ? that._jsonModel.setProperty("/DepoAdresiSH", oData.results) : sap.m.MessageBox.error(that.getResourceBundle().getText("DEPO_ADRESI_BULUNAMADI"));
+                oData.results.length > 0 ? that._jsonModel.setProperty("/AdresSorguSH", oData.results) : sap.m.MessageToast.show(that.getResourceBundle().getText("DEPO_ADRESI_BULUNAMADI"));
 
             }).catch((oError) => {
                 if (oError) {
@@ -364,7 +418,7 @@ sap.ui.define([
             sDescription = oSelectedItem.getDescription();
             sType = oSelectedItem.getInfo();
 
-            sInputId.includes("idHedefDepo") ? [this._valueHelpInput.setValue(sTitle), this._valueHelpInput.setDescription(sDescription), this._checkHedefDepo(sTitle)] : sInputId.includes("idKaynakDepo") ? [this._valueHelpInput.setValue(sTitle), this._valueHelpInput.setDescription(sDescription), this._focusInput("idHedefDepoInput", 200)] : sInputId.includes("idDepoAdresi") ? [this._valueHelpInput.setValue(sTitle), this._focusInput("idMiktarInput", 200)] : null;
+            sInputId.includes("idHedefDepo") ? [this._valueHelpInput.setValue(sTitle), this._valueHelpInput.setDescription(sDescription), this._checkHedefDepo(sTitle)] : sInputId.includes("idKaynakDepo") ? [this._valueHelpInput.setValue(sTitle), this._valueHelpInput.setDescription(sDescription), this._focusInput("idHedefDepoInput", 200)] : sInputId.includes("idDepoAdresiInput") ? [this._valueHelpInput.setValue(sTitle), this._jsonModel.setProperty("/Editable/Miktar", true), this._focusInput("idMiktarInput", 200)] : null;
 
             oEvent.getSource().getBinding("items").filter([]);
 

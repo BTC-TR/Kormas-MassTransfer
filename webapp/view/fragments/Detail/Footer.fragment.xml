@@ -3,6 +3,5 @@
     xmlns:c="sap.ui.core">
     <OverflowToolbar >
         <ToolbarSpacer ></ToolbarSpacer>
-        <Button text="{i18n>KAYDET}" type="Success" icon="sap-icon://save" press="onSaveButtonPress"></Button>
     </OverflowToolbar>
 </c:FragmentDefinition>
