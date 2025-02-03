@@ -212,8 +212,6 @@ sap.ui.define([
                     that.getModel("jsonModel").getData().HareketTuru ? that._focusInput("idDepoAdresiInput", 200) : that._focusInput("idMiktarInput", 200);
                     that.getModel("jsonModel").getData().HareketTuru ? [that._jsonModel.setProperty("/Editable/DepoAdresi", true), that._jsonModel.setProperty("/Editable/Miktar", false)] : [that._jsonModel.setProperty("/Editable/DepoAdresi", false), that._jsonModel.setProperty("/Editable/Miktar", true)];
 
-                    that.getModel("jsonModel").getData().HareketTuru ? that._getDefaultAddress() : null
-
                     let iTotal = 0;
                     that._jsonModel.getData().TransferTable.forEach(element => {
                         iTotal = + element.Quan;

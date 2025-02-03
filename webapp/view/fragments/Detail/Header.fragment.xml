@@ -6,7 +6,7 @@
             <Label text="{i18n>BARKOD}" design="Bold"/>
             <Input id="idBarkodInput" value="{jsonModel>/Detail/Barkod}" required="true" submit="_checkBarcode($event)" maxLength="13"/>
             <Label text="{i18n>MALZEME}" design="Bold"/>
-            <Input value="{jsonModel>/Detail/Matnr}" valueHelpOnly="true" showValueHelp="true" valueHelpRequest="onAdresSorguButtonPress"/>
+            <Input value="{jsonModel>/Detail/Matnr}" editable="false"/>
             <!-- <Button text="{i18n>ADRES_SORGU}" type="Attention" press="onAdresSorguButtonPress" visible="{jsonModel>/HareketTuru}"/> -->
             <Label text="{i18n>MALZEME_TANIMI}" design="Bold"/>
             <Input value="{jsonModel>/Detail/Maktx}" editable="false"/>
@@ -18,6 +18,7 @@
             <Input value="{jsonModel>/Detail/DepoStok}" editable="false"/>
             <Label ></Label>
             <HBox justifyContent="SpaceBetween">
+                <Button text="{i18n>ADRES_SORGU}" press="onAdresSorguButtonPress" type="Emphasized" />
                 <Button text="{= !${device>/system/phone} ? ${i18n>TEMIZLE} : '' }" press="_clearHeader" icon="sap-icon://sys-cancel-2" type="Reject"/>
                 <Button text="{i18n>KAYDET}" type="Success" icon="sap-icon://save" press="onSaveButtonPress"></Button>
                 <!-- <Button text="{= !${device>/system/phone} ? ${i18n>EKLE} : '' }" press="onMiktarInputSubmit" icon="sap-icon://add" type="Emphasized" iconFirst="false"/> -->

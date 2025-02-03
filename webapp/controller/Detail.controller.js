@@ -27,6 +27,8 @@ sap.ui.define([
                 this._clearHeader();
                 this._getDetail();
                 this._focusInput("idBarkodInput", 400);
+                
+                this._jsonModel.getData().HareketTuru ? this._getDefaultAddress() : null
             },
 
             onDepoAdresiInputSubmit: function (oEvent) {
