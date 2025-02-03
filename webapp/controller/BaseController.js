@@ -207,10 +207,8 @@ sap.ui.define([
                     that._jsonModel.setProperty("/Detail/Maktx", oData.Maktx);
                     that._jsonModel.setProperty("/Detail/Meins", oData.Meins);
                     that._jsonModel.setProperty("/Detail/DepoStok", oData.Clabs);
-                    that._jsonModel.setProperty("/Detail/Lgpla", oData.Lgpla);
 
-                    that.getModel("jsonModel").getData().HareketTuru ? that._focusInput("idDepoAdresiInput", 200) : that._focusInput("idMiktarInput", 200);
-                    that.getModel("jsonModel").getData().HareketTuru ? [that._jsonModel.setProperty("/Editable/DepoAdresi", true), that._jsonModel.setProperty("/Editable/Miktar", false)] : [that._jsonModel.setProperty("/Editable/DepoAdresi", false), that._jsonModel.setProperty("/Editable/Miktar", true)];
+                    that.getModel("jsonModel").getData().HareketTuru ? [that._jsonModel.setProperty("/Editable/DepoAdresi", true), that._focusInput("idDepoAdresiInput", 200)] : that._focusInput("idMiktarInput", 200)
 
                     let iTotal = 0;
                     that._jsonModel.getData().TransferTable.forEach(element => {
@@ -238,7 +236,7 @@ sap.ui.define([
                 });
 
             this._readData(sPath, this.getModel()).then((oData) => {
-                oData.EvLgpla ? that._jsonModel.setProperty("/Detail/Lgpla", oData.EvLgpla) : null
+                oData.EvLgpla ? [that._jsonModel.setProperty("/Detail/Lgpla", oData.EvLgpla)] : null
                 that._jsonModel.setProperty("/Editable/DepoAdresi", true)
                 that._jsonModel.setProperty("/Editable/Miktar", true)
             }).catch((oError) => {
@@ -254,7 +252,7 @@ sap.ui.define([
             let that = this,
                 sPath = this.getModel().createKey("/BarkodEkleSet", {
                     Matnr: oBarcodeData.Matnr,
-                    Quan: oBarcodeData.Menge,
+                    Quan:  oBarcodeData.Menge.replace(",","."),
                     Lgpla: oBarcodeData.Lgpla ? oBarcodeData.Lgpla : "",
                     Klgort: this._jsonModel.getData().Main.KaynakDepo,
                     Hlgort: this._jsonModel.getData().Main.HedefDepo
@@ -275,6 +273,7 @@ sap.ui.define([
                 }
             }).finally(() => {
                 sap.ui.core.BusyIndicator.hide();
+                this._getDefaultAddress()
             });
         },
 
@@ -342,6 +341,7 @@ sap.ui.define([
             }).finally(() => {
                 sap.ui.core.BusyIndicator.hide();
                 this._getDetail()
+                this._getDefaultAddress()
             });
         },
 

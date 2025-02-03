@@ -17,7 +17,7 @@ sap.ui.define([
             if (isFloat[1] === "00000000000000") {
                 return parseInt(sValue);
             } else {
-                return parseFloat(sValue).toFixed(2);
+                return parseFloat(sValue).toFixed(3);
             }
         },
 
