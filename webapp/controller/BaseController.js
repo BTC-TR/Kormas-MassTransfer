@@ -138,10 +138,10 @@ sap.ui.define([
         _getAdresses: function () {
             this._valueHelpInput = this.getView().byId("idDepoAdresiInput")
             if (!this._adresSorguDialog) {
-                this._getDepoAdresi()
                 this._adresSorguDialog = sap.ui.xmlfragment(this.getView().getId(), "com.kormas.uretimdentoplutransfer.view.fragments.valueHelp.AdresSorguSH", this);
                 this.getView().addDependent(this._adresSorguDialog);
             }
+            this._getDepoAdresi()
             setTimeout(() => {
                 this._adresSorguDialog.open();
                 this._afterFocus(this._adresSorguDialog);
@@ -208,7 +208,7 @@ sap.ui.define([
                     that._jsonModel.setProperty("/Detail/Meins", oData.Meins);
                     that._jsonModel.setProperty("/Detail/DepoStok", oData.Clabs);
 
-                    that.getModel("jsonModel").getData().HareketTuru ? [that._jsonModel.setProperty("/Editable/DepoAdresi", true), that._focusInput("idDepoAdresiInput", 200)] : that._focusInput("idMiktarInput", 200)
+                    that.getModel("jsonModel").getData().HareketTuru ? [that._jsonModel.setProperty("/Editable/DepoAdresi", true), that._focusInput("idDepoAdresiInput", 200)] : [that._focusInput("idMiktarInput", 200), that._jsonModel.setProperty("/Editable/Miktar", true)]
 
                     let iTotal = 0;
                     that._jsonModel.getData().TransferTable.forEach(element => {

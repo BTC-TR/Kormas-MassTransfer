@@ -15,11 +15,11 @@
             <Label text="{i18n>MIKTAR_VE_BIRIM}" design="Bold"/>
             <Input id="idMiktarInput" value="{jsonModel>/Detail/Menge}" description="{jsonModel>/Detail/Meins}" submit="onMiktarInputSubmit" required="true" maxLength="10" liveChange="onMengeInputLiveChange" editable="{jsonModel>/Editable/Miktar}"/>
             <Label text="{i18n>DEPO_ADRES_STOK_BILGISI}" design="Bold"/>
-            <Input value="{jsonModel>/Detail/DepoStok}" editable="false"/>
+            <Input value="{parts:[{path:'jsonModel>/Detail/DepoStok'}, 'TRY'], type:'sap.ui.model.type.Currency', formatOptions:{ showMeasure: false}}" editable="false"/>
             <Label ></Label>
             <HBox justifyContent="SpaceBetween">
                 <Button text="{i18n>ADRES_SORGU}" press="onAdresSorguButtonPress" type="Emphasized" />
-                <Button text="{= !${device>/system/phone} ? ${i18n>TEMIZLE} : '' }" press="_clearHeader" icon="sap-icon://sys-cancel-2" type="Reject"/>
+                <Button text="{= !${device>/system/phone} ? ${i18n>TEMIZLE} : '' }" press="onPressClear" icon="sap-icon://sys-cancel-2" type="Reject"/>
                 <Button text="{i18n>KAYDET}" type="Success" icon="sap-icon://save" press="onSaveButtonPress"></Button>
                 <!-- <Button text="{= !${device>/system/phone} ? ${i18n>EKLE} : '' }" press="onMiktarInputSubmit" icon="sap-icon://add" type="Emphasized" iconFirst="false"/> -->
                 <!-- <Button text="{i18n>DETAY}" press="_getDetail()" type="Accept"/> -->

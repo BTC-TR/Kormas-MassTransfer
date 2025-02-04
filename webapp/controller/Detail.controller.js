@@ -97,6 +97,11 @@ sap.ui.define([
 
             onSaveButtonPress: function () {
                 this.getView().byId("idTransferTable").getItems().length === 0 ? sap.m.MessageBox.error(this.getResourceBundle().getText("TRANSFER_TABLOSU_BOS")) : this._saveTransfer();
+            },
+
+            onPressClear: function(){
+                this._clearHeader()
+                this._clearEditable()
             }
         });
     });

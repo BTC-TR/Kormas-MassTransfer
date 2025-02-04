@@ -33,16 +33,21 @@ sap.ui.define([
                 let that = this,
                     sValue = oEvent.getParameter("value"),
                     aKaynakDepolar = this.getModel("jsonModel").getProperty("/KaynakDepoSH"),
-                    sKaynakDepo = aKaynakDepolar.find((oDepo) => oDepo.Lgort === sValue);
+                    sKaynakDepo = aKaynakDepolar.find((oDepo) => oDepo.Lgort === sValue),
+                    oInput = oEvent.getSource();
 
                 if (sKaynakDepo) {
                     oEvent.getSource().setValue(sKaynakDepo.Lgort);
                     oEvent.getSource().setDescription(sKaynakDepo.Lgobe);
                     this._focusInput("idHedefDepoInput", 200)
                 } else {
-                    oEvent.getSource().setValue("");
-                    oEvent.getSource().setDescription("");
-                    oEvent.getSource().focus();
+                    oInput.setValue("");
+                    oInput.setDescription("");
+                    oInput.focus();
+                    sap.m.MessageBox.error(this.getResourceBundle().getText("DEPO_YETKINIZ_YOKTUR", sValue), {
+                        onClose: function () {
+                        }
+                    })
                 }
             },
 
@@ -50,16 +55,21 @@ sap.ui.define([
                 let that = this,
                     sValue = oEvent.getParameter("value"),
                     aHedefDepolar = this.getModel("jsonModel").getProperty("/HedefDepoSH"),
-                    sHedefDepo = aHedefDepolar.find((oDepo) => oDepo.Lgort === sValue);
+                    sHedefDepo = aHedefDepolar.find((oDepo) => oDepo.Lgort === sValue),
+                    oInput = oEvent.getSource();
 
                 if (sHedefDepo) {
                     oEvent.getSource().setValue(sHedefDepo.Lgort);
                     oEvent.getSource().setDescription(sHedefDepo.Lgobe);
                     this._checkHedefDepo(sHedefDepo.Lgort)
                 } else {
-                    oEvent.getSource().setValue("");
-                    oEvent.getSource().setDescription("");
-                    oEvent.getSource().focus();
+                    oInput.setValue("");
+                    oInput.setDescription("");
+                    oInput.focus();
+                    sap.m.MessageBox.error(this.getResourceBundle().getText("DEPO_YETKINIZ_YOKTUR", sValue), {
+                        onClose: function () {
+                        }
+                    })
                 }
             },
 
