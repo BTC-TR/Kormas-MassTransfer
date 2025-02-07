@@ -83,10 +83,10 @@ sap.ui.define([
                     return sap.m.MessageBox.error(that.getResourceBundle().getText("MIKTAR_STOKTAN_FAZLA", [that._jsonModel.getData().Main.KaynakDepo, that._jsonModel.getData().Detail.Menge]))
                 }
 
-                let toplam = (parseInt(oBarcodeData.Menge) + parseInt(this._jsonModel.getData().TotalMenge));
-                if (toplam > parseInt(oBarcodeData.DepoStok)) {
-                    return sap.m.MessageBox.error(that.getResourceBundle().getText("GIRILENLER_TOPLAMI_STOKTAN_FAZLA", [toplam, oBarcodeData.DepoStok, (parseInt(oBarcodeData.DepoStok) - that._jsonModel.getData().TotalMenge)]))
-                }
+                // let toplam = (parseInt(oBarcodeData.Menge) + parseInt(this._jsonModel.getData().TotalMenge));
+                // if (toplam > parseInt(oBarcodeData.DepoStok)) {
+                //     return sap.m.MessageBox.error(that.getResourceBundle().getText("GIRILENLER_TOPLAMI_STOKTAN_FAZLA", [toplam, oBarcodeData.DepoStok, (parseInt(oBarcodeData.DepoStok) - that._jsonModel.getData().TotalMenge)]))
+                // }
 
                 !validate ? sap.m.MessageBox.error(this.getResourceBundle().getText("ZORUNLU_ALANLARI_DOLDURUNUZ")) : this._addBarcode(oBarcodeData);
             },

@@ -16,6 +16,9 @@
                 <Label text="{i18n>PARTI}" design="Bold"></Label>
             </Column>
             <Column minScreenWidth="Tablet" demandPopin="true">
+                <Label text="{i18n>DEPO_ADRESI}" design="Bold"></Label>
+            </Column>
+            <Column minScreenWidth="Tablet" demandPopin="true">
                 <Label text="{i18n>MIKTAR_VE_BIRIM}" design="Bold"></Label>
             </Column>
         </columns>
@@ -23,6 +26,7 @@
             <ColumnListItem >
                 <ObjectIdentifier title="{jsonModel>Matnr}" text="{jsonModel>Maktx}"></ObjectIdentifier>
                 <ObjectStatus text="{jsonModel>Charg}" state="Success"></ObjectStatus>
+                <ObjectStatus text="{jsonModel>Lgpla}" state="Information"></ObjectStatus>
                 <ObjectNumber number="{path:'jsonModel>Quan', formatter:'.formatter.numberUnit'}" unit="{jsonModel>Unit}" state="Error"></ObjectNumber>
             </ColumnListItem>
         </items>

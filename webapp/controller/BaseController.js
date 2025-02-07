@@ -260,12 +260,8 @@ sap.ui.define([
 
             this._readData(sPath, this.getModel()).then((oData) => {
 
-                oData.Type === "S" ? [sap.m.MessageToast.show(oData.Message), that._clearHeader(), that._getDetail(), that._clearEditable()] : sap.m.MessageBox.error(oData.Message, {
-                    onClose: function () {
-                        that._jsonModel.setProperty("/Detail/Lgpla", "")
-                        that._focusInput("idDepoAdresiInput", 300)
-                    }
-                });
+                oData.Type === "S" ? [sap.m.MessageToast.show(oData.Message), that._clearHeader(), that._getDetail(), that._clearEditable(), 
+                    that._getDefaultAddress()] : sap.m.MessageBox.error(oData.Message);
 
             }).catch((oError) => {
                 if (oError) {
@@ -273,7 +269,6 @@ sap.ui.define([
                 }
             }).finally(() => {
                 sap.ui.core.BusyIndicator.hide();
-                this._getDefaultAddress()
             });
         },
 
@@ -353,6 +348,7 @@ sap.ui.define([
                 ];
 
             this._readMultiData("/AdresSorguSet", aFilters, this.getModel()).then((oData) => {
+                that._jsonModel.setProperty("/AdresSorguSH", [])
                 oData.results.length > 0 ? that._jsonModel.setProperty("/AdresSorguSH", oData.results) : sap.m.MessageToast.show(that.getResourceBundle().getText("DEPO_ADRESI_BULUNAMADI"));
 
             }).catch((oError) => {
